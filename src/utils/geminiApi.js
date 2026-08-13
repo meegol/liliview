@@ -4,7 +4,7 @@
 
 const GEMINI_MODEL = "gemini-2.5-flash";
 
-// Get API Key from Environment Variable or Global window config
+// Reads API Key from environment variable VITE_GEMINI_API_KEY
 export const getApiKey = () => {
   return import.meta.env.VITE_GEMINI_API_KEY || window.LILIVIEW_API_KEY || "";
 };
@@ -13,7 +13,7 @@ async function callGemini(prompt, jsonSchema = null) {
   const apiKey = getApiKey();
   
   if (!apiKey) {
-    throw new Error("Gemini API Key is not configured yet.");
+    throw new Error("Gemini API Key is not configured.");
   }
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey.trim()}`;
