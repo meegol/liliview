@@ -4,9 +4,8 @@ import PdfUploader from './components/PdfUploader';
 import ReviewerTab from './components/ReviewerTab';
 import QuizTab from './components/QuizTab';
 import FlashcardTab from './components/FlashcardTab';
-import ApiKeyModal from './components/ApiKeyModal';
 import HistorySidebar from './components/HistorySidebar';
-import { BookOpen, HelpCircle, Layers, UploadCloud, Heart, Sparkles } from 'lucide-react';
+import { BookOpen, HelpCircle, Layers, UploadCloud, Heart } from 'lucide-react';
 
 export default function App() {
   // Theme State: 'light' or 'dark'
@@ -14,13 +13,7 @@ export default function App() {
     return localStorage.getItem('liliview_theme') || 'light';
   });
 
-  // API Key State
-  const [apiKey, setApiKey] = useState(() => {
-    return localStorage.getItem('liliview_api_key') || '';
-  });
-
   // UI Modals & Drawers
-  const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
 
   // Active Generated Study Session
@@ -39,20 +32,8 @@ export default function App() {
     localStorage.setItem('liliview_theme', theme);
   }, [theme]);
 
-  // Prompt user for API key on first load if missing
-  useEffect(() => {
-    if (!apiKey) {
-      setTimeout(() => setIsApiKeyModalOpen(true), 600);
-    }
-  }, []);
-
   const handleToggleTheme = () => {
     setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
-  };
-
-  const handleSaveApiKey = (key) => {
-    setApiKey(key);
-    localStorage.setItem('liliview_api_key', key);
   };
 
   const handleStudyKitGenerated = (newKit) => {
@@ -83,8 +64,6 @@ export default function App() {
       <Header
         theme={theme}
         onToggleTheme={handleToggleTheme}
-        onOpenApiKeyModal={() => setIsApiKeyModalOpen(true)}
-        hasApiKey={Boolean(apiKey)}
         onOpenHistory={() => setIsHistoryOpen(true)}
         historyCount={historyList.length}
       />
@@ -96,8 +75,6 @@ export default function App() {
           /* PDF Upload View */
           <PdfUploader 
             onStudyKitGenerated={handleStudyKitGenerated}
-            apiKey={apiKey}
-            onOpenApiKeyModal={() => setIsApiKeyModalOpen(true)}
           />
         ) : (
           /* Active Study Kit Dashboard */
@@ -213,14 +190,6 @@ export default function App() {
           Crafted with <Heart size={14} fill="var(--accent-rose)" color="var(--accent-rose)" /> for your special study sessions • <strong>Liliview</strong>
         </p>
       </footer>
-
-      {/* API Key Modal */}
-      <ApiKeyModal 
-        isOpen={isApiKeyModalOpen}
-        onClose={() => setIsApiKeyModalOpen(false)}
-        apiKey={apiKey}
-        onSaveApiKey={handleSaveApiKey}
-      />
 
       {/* Saved History Sidebar */}
       <HistorySidebar

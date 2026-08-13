@@ -1,15 +1,19 @@
 /**
- * Study engine integration for generating study content.
+ * Study engine integration using Google Gemini API.
  */
 
 const GEMINI_MODEL = "gemini-2.5-flash";
 
-/**
- * Call study engine API using direct REST fetch.
- */
-async function callGemini(apiKey, prompt, jsonSchema = null) {
+// Get API Key from Environment Variable or Global window config
+export const getApiKey = () => {
+  return import.meta.env.VITE_GEMINI_API_KEY || window.LILIVIEW_API_KEY || "";
+};
+
+async function callGemini(prompt, jsonSchema = null) {
+  const apiKey = getApiKey();
+  
   if (!apiKey) {
-    throw new Error("API Key is missing. Please click the key icon in the header to enter your key.");
+    throw new Error("Gemini API Key is not configured yet.");
   }
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey.trim()}`;
@@ -62,7 +66,7 @@ async function callGemini(apiKey, prompt, jsonSchema = null) {
 /**
  * Generate Complete Reviewer, Quiz, and Flashcards from extracted PDF text.
  */
-export async function generateStudyMaterial(apiKey, pdfTitle, pdfText) {
+export async function generateStudyMaterial(pdfTitle, pdfText) {
   const truncatedText = pdfText.length > 50000 ? pdfText.slice(0, 50000) + "\n...[Text truncated for size]" : pdfText;
 
   const prompt = `
@@ -166,5 +170,5 @@ OUTPUT RULES:
     required: ["reviewer", "quiz", "flashcards"]
   };
 
-  return await callGemini(apiKey, prompt, schema);
+  return await callGemini(prompt, schema);
 }

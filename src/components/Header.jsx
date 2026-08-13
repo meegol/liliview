@@ -1,11 +1,9 @@
 import React from 'react';
-import { Heart, Key, Moon, Sun, History, BookOpen, Sparkles } from 'lucide-react';
+import { Moon, Sun, History, BookOpen, Sparkles } from 'lucide-react';
 
 export default function Header({ 
   theme, 
   onToggleTheme, 
-  onOpenApiKeyModal, 
-  hasApiKey, 
   onOpenHistory,
   historyCount 
 }) {
@@ -50,7 +48,7 @@ export default function Header({
             <Sparkles size={18} color="var(--primary-pink)" />
           </div>
           <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 500 }}>
-            Pastel PDF AI Study Companion
+            Pastel PDF Study Companion
           </p>
         </div>
       </div>
@@ -65,7 +63,7 @@ export default function Header({
           title="Past Saved Study Kits"
         >
           <History size={18} />
-          <span style={{ display: 'none', '@media (minWidth: 640px)': { display: 'inline' } }}>Saved</span>
+          <span>Saved</span>
           {historyCount > 0 && (
             <span style={{
               background: 'var(--primary-pink)',
@@ -78,22 +76,6 @@ export default function Header({
               {historyCount}
             </span>
           )}
-        </button>
-
-        {/* API Key Status / Config Button */}
-        <button 
-          onClick={onOpenApiKeyModal} 
-          className="btn-secondary"
-          style={{ 
-            padding: '0.6rem 1rem', 
-            fontSize: '0.88rem',
-            borderColor: hasApiKey ? 'var(--soft-pink-border)' : 'var(--accent-rose)',
-            backgroundColor: hasApiKey ? 'var(--soft-pink-bg)' : 'var(--error-bg)'
-          }}
-          title="Configure Gemini API Key"
-        >
-          <Key size={18} color={hasApiKey ? "var(--primary-pink)" : "var(--error)"} />
-          <span>{hasApiKey ? "API Key Set ✨" : "Enter API Key 🔑"}</span>
         </button>
 
         {/* Dark/Light Mode Switch */}

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { UploadCloud, FileText, Sparkles, AlertCircle, Loader2 } from 'lucide-react';
 import { extractTextFromPdf } from '../utils/pdfExtractor';
 
-export default function PdfUploader({ onStudyKitGenerated, apiKey, onOpenApiKeyModal }) {
+export default function PdfUploader({ onStudyKitGenerated }) {
   const [file, setFile] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [extracting, setExtracting] = useState(false);
@@ -48,11 +48,6 @@ export default function PdfUploader({ onStudyKitGenerated, apiKey, onOpenApiKeyM
   const handleProcessPdf = async () => {
     if (!file) return;
 
-    if (!apiKey) {
-      onOpenApiKeyModal();
-      return;
-    }
-
     setExtracting(true);
     setError('');
     setProgress(10);
@@ -75,7 +70,7 @@ export default function PdfUploader({ onStudyKitGenerated, apiKey, onOpenApiKeyM
       setProgress(75);
       setStatusText('Building Reviewer, Quiz & 3D Flashcards...');
       
-      const studyKit = await generateStudyMaterial(apiKey, pdfData.title, pdfData.fullText);
+      const studyKit = await generateStudyMaterial(pdfData.title, pdfData.fullText);
 
       setProgress(100);
       setStatusText('Done!');
