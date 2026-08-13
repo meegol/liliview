@@ -2,7 +2,8 @@
   /* Color Palette - Pastel Pink Light Theme */
   --bg-color: #FFF5F7;
   --bg-gradient: linear-gradient(135deg, #FFF5F7 0%, #FFEBEF 50%, #FFDFE6 100%);
-  --card-bg: rgba(255, 255, 255, 0.88);
+  --card-bg: rgba(255, 255, 255, 0.92);
+  --card-bg-opaque: #FFFFFF;
   --card-border: rgba(255, 183, 197, 0.4);
   --card-shadow: 0 10px 30px -5px rgba(255, 133, 161, 0.15), 0 4px 12px rgba(247, 37, 133, 0.05);
   
@@ -39,7 +40,8 @@
   /* Color Palette - Midnight Plum Pastel Dark Theme */
   --bg-color: #140912;
   --bg-gradient: linear-gradient(135deg, #140912 0%, #200E1D 50%, #2A1024 100%);
-  --card-bg: rgba(37, 18, 34, 0.82);
+  --card-bg: rgba(37, 18, 34, 0.85);
+  --card-bg-opaque: #221020;
   --card-border: rgba(255, 158, 187, 0.18);
   --card-shadow: 0 12px 35px -5px rgba(0, 0, 0, 0.5), 0 4px 15px rgba(255, 133, 161, 0.08);
   
@@ -160,7 +162,7 @@ h1, h2, h3, h4, h5, h6 {
   transform: scale(0.98);
 }
 
-/* 3D Flip Flashcard CSS */
+/* 3D Flip Flashcard CSS - Opaque & Zero Bleedthrough */
 .perspective-1000 {
   perspective: 1000px;
 }
@@ -179,6 +181,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .flashcard-front, .flashcard-back {
   position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   -webkit-backface-visibility: hidden;
@@ -187,12 +190,31 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 2.25rem;
+  padding: 2rem;
   overflow-y: auto;
+  box-shadow: var(--card-shadow);
+  /* Solid opaque background prevents text bleedthrough */
+  background: var(--card-bg-opaque) !important;
+}
+
+.flashcard-front {
+  transform: rotateY(0deg);
+  z-index: 2;
 }
 
 .flashcard-back {
   transform: rotateY(180deg);
+  z-index: 1;
+}
+
+.flashcard-inner.flipped .flashcard-front {
+  z-index: 1;
+  pointer-events: none;
+}
+
+.flashcard-inner.flipped .flashcard-back {
+  z-index: 2;
+  pointer-events: auto;
 }
 
 /* Animations */

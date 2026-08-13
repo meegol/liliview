@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { UploadCloud, FileText, Sparkles, AlertCircle, Loader2 } from 'lucide-react';
+import { UploadCloud, FileText, Sparkles, AlertCircle, Loader2, RefreshCw } from 'lucide-react';
 import { extractTextFromPdf } from '../utils/pdfExtractor';
 
 export default function PdfUploader({ onStudyKitGenerated }) {
@@ -50,25 +50,25 @@ export default function PdfUploader({ onStudyKitGenerated }) {
 
     setExtracting(true);
     setError('');
-    setProgress(10);
+    setProgress(15);
     setStatusText('Reading PDF pages & extracting text...');
 
     try {
       const pdfData = await extractTextFromPdf(file, (percent) => {
-        setProgress(Math.round(10 + percent * 0.3));
+        setProgress(Math.round(15 + percent * 0.35)); // 15% to 50%
       });
 
       if (!pdfData.fullText || pdfData.fullText.length < 20) {
         throw new Error('Could not extract readable text from this PDF. It might be scanned images or password protected.');
       }
 
-      setProgress(55);
+      setProgress(60);
       setStatusText(`Analyzing ${pdfData.pageCount} document pages...`);
 
       const { generateStudyMaterial } = await import('../utils/geminiApi');
       
       setProgress(75);
-      setStatusText('Building Reviewer, Quiz & 3D Flashcards...');
+      setStatusText('Connecting to Google Gemini API & generating kit...');
       
       const studyKit = await generateStudyMaterial(pdfData.title, pdfData.fullText);
 
@@ -83,12 +83,13 @@ export default function PdfUploader({ onStudyKitGenerated }) {
           data: studyKit
         });
         setExtracting(false);
-      }, 500);
+      }, 400);
 
     } catch (err) {
-      console.error(err);
-      setError(err.message || 'An error occurred while processing the PDF.');
+      console.error("Study Kit Generation Failed:", err);
+      setError(err.message || 'Failed to generate study kit. Please try refreshing or re-uploading the file.');
       setExtracting(false);
+      setProgress(0);
     }
   };
 
@@ -115,7 +116,7 @@ export default function PdfUploader({ onStudyKitGenerated }) {
             border: `2px dashed ${isDragging ? 'var(--accent-rose)' : 'var(--soft-pink-border)'}`,
             backgroundColor: isDragging ? 'var(--soft-pink-bg)' : 'rgba(255, 255, 255, 0.02)',
             borderRadius: 'var(--radius-lg)',
-            padding: '3rem 2rem',
+            padding: '2.5rem 1.5rem',
             cursor: 'pointer',
             transition: 'var(--transition-smooth)',
             marginBottom: '1.5rem',
@@ -137,17 +138,17 @@ export default function PdfUploader({ onStudyKitGenerated }) {
           {!file ? (
             <div>
               <div style={{
-                width: '64px',
-                height: '64px',
+                width: '60px',
+                height: '60px',
                 borderRadius: '50%',
                 background: 'var(--soft-pink-bg)',
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 color: 'var(--primary-pink)',
-                marginBottom: '1rem'
+                marginBottom: '0.85rem'
               }} className="animate-float">
-                <UploadCloud size={32} />
+                <UploadCloud size={28} />
               </div>
               <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.3rem' }}>
                 Drag & Drop your PDF here
@@ -159,19 +160,20 @@ export default function PdfUploader({ onStudyKitGenerated }) {
           ) : (
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem' }}>
               <div style={{
-                width: '48px',
-                height: '48px',
+                width: '44px',
+                height: '44px',
                 borderRadius: '12px',
                 background: 'var(--soft-pink-bg)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: 'var(--accent-rose)'
+                color: 'var(--accent-rose)',
+                flexShrink: 0
               }}>
-                <FileText size={24} />
+                <FileText size={22} />
               </div>
               <div style={{ textAlign: 'left' }}>
-                <h4 style={{ fontWeight: 700, fontSize: '1rem' }}>{file.name}</h4>
+                <h4 style={{ fontWeight: 700, fontSize: '0.98rem' }}>{file.name}</h4>
                 <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
                   {(file.size / (1024 * 1024)).toFixed(2)} MB PDF Document
                 </p>
@@ -185,18 +187,25 @@ export default function PdfUploader({ onStudyKitGenerated }) {
           <div style={{
             backgroundColor: 'var(--error-bg)',
             color: 'var(--error)',
-            padding: '0.85rem 1rem',
+            padding: '1rem 1.25rem',
             borderRadius: 'var(--radius-md)',
             border: '1px solid rgba(230, 57, 70, 0.3)',
             fontSize: '0.88rem',
             marginBottom: '1.25rem',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            justifyContent: 'center'
+            textAlign: 'left'
           }}>
-            <AlertCircle size={18} />
-            <span>{error}</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 700, marginBottom: '0.3rem' }}>
+              <AlertCircle size={18} />
+              <span>Generation Error</span>
+            </div>
+            <p style={{ color: 'var(--text-main)', lineHeight: 1.5, marginBottom: '0.75rem' }}>{error}</p>
+            <button 
+              onClick={handleProcessPdf} 
+              className="btn-pink"
+              style={{ padding: '0.4rem 0.85rem', fontSize: '0.8rem', minHeight: '32px' }}
+            >
+              <RefreshCw size={14} /> Try Again
+            </button>
           </div>
         )}
 

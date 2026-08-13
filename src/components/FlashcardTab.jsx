@@ -80,7 +80,7 @@ export default function FlashcardTab({ flashcards }) {
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
           <Layers size={20} color="var(--primary-pink)" />
-          <h2 style={{ fontSize: '1.25rem', fontWeight: 800 }}>3D Interactive Flashcards</h2>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 800 }}>3D Flashcards</h2>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
@@ -95,13 +95,12 @@ export default function FlashcardTab({ flashcards }) {
       </div>
 
       {/* 3D Flip Card Container */}
-      <div className="perspective-1000" style={{ minHeight: '320px', height: '340px', width: '100%', marginBottom: '1.5rem', cursor: 'pointer' }} onClick={handleFlip}>
+      <div className="perspective-1000" style={{ minHeight: '340px', height: '360px', width: '100%', marginBottom: '1.5rem', cursor: 'pointer' }} onClick={handleFlip}>
         <div className={`flashcard-inner ${isFlipped ? 'flipped' : ''}`}>
           
-          {/* Card Front */}
-          <div className="flashcard-front glass-panel" style={{
-            border: '2px solid var(--card-border)',
-            background: 'linear-gradient(135deg, var(--card-bg) 0%, var(--soft-pink-bg) 100%)'
+          {/* Card Front (Solid Opaque Background) */}
+          <div className="flashcard-front" style={{
+            border: '2px solid var(--card-border)'
           }}>
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -122,16 +121,17 @@ export default function FlashcardTab({ flashcards }) {
             </div>
 
             <div style={{ textAlign: 'center', margin: 'auto 0' }}>
-              <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-main)', lineHeight: 1.5 }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-main)', lineHeight: 1.5 }}>
                 {currentCard.question}
               </h3>
 
               {showHint && currentCard.hint && (
                 <p style={{
                   marginTop: '0.75rem',
-                  fontSize: '0.82rem',
+                  fontSize: '0.85rem',
                   color: 'var(--accent-rose)',
-                  backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                  backgroundColor: 'var(--soft-pink-bg)',
+                  border: '1px solid var(--soft-pink-border)',
                   padding: '0.4rem 0.85rem',
                   borderRadius: 'var(--radius-md)',
                   display: 'inline-block'
@@ -158,10 +158,9 @@ export default function FlashcardTab({ flashcards }) {
             </div>
           </div>
 
-          {/* Card Back */}
-          <div className="flashcard-back glass-panel" style={{
-            border: '2px solid var(--accent-rose)',
-            background: 'linear-gradient(135deg, var(--card-bg) 0%, rgba(247, 37, 133, 0.08) 100%)'
+          {/* Card Back (Solid Opaque Background) */}
+          <div className="flashcard-back" style={{
+            border: '2px solid var(--accent-rose)'
           }}>
             <div>
               <span style={{
@@ -177,7 +176,7 @@ export default function FlashcardTab({ flashcards }) {
             </div>
 
             <div style={{ textAlign: 'center', margin: 'auto 0', overflowY: 'auto' }}>
-              <p style={{ fontSize: '1.05rem', fontWeight: 600, color: 'var(--text-main)', lineHeight: 1.5 }}>
+              <p style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--text-main)', lineHeight: 1.6 }}>
                 {currentCard.answer}
               </p>
             </div>
