@@ -58,7 +58,7 @@ export default function App() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', paddingBottom: '3rem' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', paddingBottom: '2.5rem' }}>
       
       {/* App Header */}
       <Header
@@ -69,7 +69,7 @@ export default function App() {
       />
 
       {/* Main Content Area */}
-      <main style={{ flex: 1, maxWidth: '1200px', width: '92%', margin: '0 auto' }}>
+      <main style={{ flex: 1, maxWidth: '1200px', width: '94%', margin: '0 auto' }}>
         
         {!currentKit ? (
           /* PDF Upload View */
@@ -85,78 +85,89 @@ export default function App() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              marginBottom: '2rem',
+              marginBottom: '1.5rem',
               flexWrap: 'wrap',
-              gap: '1rem'
+              gap: '0.85rem'
             }}>
               <div>
-                <span style={{ fontSize: '0.82rem', color: 'var(--accent-rose)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                <span style={{ fontSize: '0.78rem', color: 'var(--accent-rose)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                   Study Document
                 </span>
-                <h2 style={{ fontSize: '1.6rem', fontWeight: 800 }}>{currentKit.title}</h2>
+                <h2 style={{ fontSize: '1.4rem', fontWeight: 800 }}>{currentKit.title}</h2>
               </div>
 
-              {/* Tab Selector */}
+              {/* Scrollable Tab Selector on Mobile */}
               <div className="glass-panel" style={{
-                display: 'inline-flex',
-                padding: '0.35rem',
+                display: 'flex',
+                padding: '0.3rem',
                 borderRadius: 'var(--radius-md)',
-                gap: '0.25rem'
+                gap: '0.2rem',
+                maxWidth: '100%',
+                overflowX: 'auto',
+                WebkitOverflowScrolling: 'touch'
               }}>
                 <button
                   onClick={() => setActiveTab('reviewer')}
                   className={activeTab === 'reviewer' ? 'btn-pink' : 'btn-secondary'}
                   style={{
-                    padding: '0.5rem 1rem',
-                    fontSize: '0.88rem',
+                    padding: '0.45rem 0.85rem',
+                    fontSize: '0.82rem',
+                    minHeight: '36px',
+                    whiteSpace: 'nowrap',
                     boxShadow: activeTab === 'reviewer' ? undefined : 'none',
                     border: 'none',
                     backgroundColor: activeTab === 'reviewer' ? undefined : 'transparent'
                   }}
                 >
-                  <BookOpen size={16} /> Reviewer
+                  <BookOpen size={15} /> Reviewer
                 </button>
 
                 <button
                   onClick={() => setActiveTab('quiz')}
                   className={activeTab === 'quiz' ? 'btn-pink' : 'btn-secondary'}
                   style={{
-                    padding: '0.5rem 1rem',
-                    fontSize: '0.88rem',
+                    padding: '0.45rem 0.85rem',
+                    fontSize: '0.82rem',
+                    minHeight: '36px',
+                    whiteSpace: 'nowrap',
                     boxShadow: activeTab === 'quiz' ? undefined : 'none',
                     border: 'none',
                     backgroundColor: activeTab === 'quiz' ? undefined : 'transparent'
                   }}
                 >
-                  <HelpCircle size={16} /> Quiz ({currentKit.data.quiz?.length || 0})
+                  <HelpCircle size={15} /> Quiz ({currentKit.data.quiz?.length || 0})
                 </button>
 
                 <button
                   onClick={() => setActiveTab('flashcards')}
                   className={activeTab === 'flashcards' ? 'btn-pink' : 'btn-secondary'}
                   style={{
-                    padding: '0.5rem 1rem',
-                    fontSize: '0.88rem',
+                    padding: '0.45rem 0.85rem',
+                    fontSize: '0.82rem',
+                    minHeight: '36px',
+                    whiteSpace: 'nowrap',
                     boxShadow: activeTab === 'flashcards' ? undefined : 'none',
                     border: 'none',
                     backgroundColor: activeTab === 'flashcards' ? undefined : 'transparent'
                   }}
                 >
-                  <Layers size={16} /> Flashcards ({currentKit.data.flashcards?.length || 0})
+                  <Layers size={15} /> Flashcards ({currentKit.data.flashcards?.length || 0})
                 </button>
 
                 <button
                   onClick={() => setCurrentKit(null)}
                   className="btn-secondary"
                   style={{
-                    padding: '0.5rem 1rem',
-                    fontSize: '0.88rem',
+                    padding: '0.45rem 0.85rem',
+                    fontSize: '0.82rem',
+                    minHeight: '36px',
+                    whiteSpace: 'nowrap',
                     border: 'none',
                     backgroundColor: 'transparent'
                   }}
                   title="Upload another PDF"
                 >
-                  <UploadCloud size={16} /> New PDF
+                  <UploadCloud size={15} /> New PDF
                 </button>
               </div>
             </div>
@@ -182,12 +193,12 @@ export default function App() {
       {/* Footer */}
       <footer style={{
         textAlign: 'center',
-        marginTop: '4rem',
-        fontSize: '0.85rem',
+        marginTop: '3rem',
+        fontSize: '0.82rem',
         color: 'var(--text-muted)'
       }}>
         <p style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.35rem' }}>
-          Crafted with <Heart size={14} fill="var(--accent-rose)" color="var(--accent-rose)" /> for your special study sessions • <strong>Liliview</strong>
+          Crafted with <Heart size={13} fill="var(--accent-rose)" color="var(--accent-rose)" /> for your special study sessions • <strong>Liliview</strong>
         </p>
       </footer>
 

@@ -4,7 +4,6 @@
 
 const GEMINI_MODEL = "gemini-2.5-flash";
 
-// Reads API Key from environment variable VITE_GEMINI_API_KEY
 export const getApiKey = () => {
   return import.meta.env.VITE_GEMINI_API_KEY || window.LILIVIEW_API_KEY || "";
 };
@@ -12,7 +11,7 @@ export const getApiKey = () => {
 async function callGemini(prompt, jsonSchema = null) {
   const apiKey = getApiKey();
   
-  if (!apiKey) {
+  if (!apiKey || apiKey.length < 5) {
     throw new Error("Gemini API Key is not configured.");
   }
 
@@ -34,32 +33,45 @@ async function callGemini(prompt, jsonSchema = null) {
     requestBody.generationConfig.responseSchema = jsonSchema;
   }
 
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(requestBody)
-  });
-
-  if (!response.ok) {
-    const errData = await response.json().catch(() => ({}));
-    const errMsg = errData.error?.message || response.statusText;
-    throw new Error(`API Error (${response.status}): ${errMsg}`);
-  }
-
-  const data = await response.json();
-  const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-
-  if (!rawText) {
-    throw new Error("Received empty response from study engine.");
-  }
+  // 30 second timeout controller
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 30000);
 
   try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(requestBody),
+      signal: controller.signal
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      const errData = await response.json().catch(() => ({}));
+      const errMsg = errData.error?.message || response.statusText;
+      if (response.status === 400 || response.status === 403) {
+        throw new Error(`API Key Error (${response.status}): Key was rejected by Google.`);
+      }
+      throw new Error(`API Error (${response.status}): ${errMsg}`);
+    }
+
+    const data = await response.json();
+    const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+    if (!rawText) {
+      throw new Error("Received empty response from study engine.");
+    }
+
     return JSON.parse(rawText);
   } catch (err) {
-    console.error("JSON Parsing Error:", rawText);
-    throw new Error("Failed to parse structured output from study engine.");
+    clearTimeout(timeoutId);
+    if (err.name === 'AbortError') {
+      throw new Error("Request timed out. The PDF text might be too large.");
+    }
+    throw err;
   }
 }
 
@@ -67,24 +79,17 @@ async function callGemini(prompt, jsonSchema = null) {
  * Generate Complete Reviewer, Quiz, and Flashcards from extracted PDF text.
  */
 export async function generateStudyMaterial(pdfTitle, pdfText) {
-  const truncatedText = pdfText.length > 50000 ? pdfText.slice(0, 50000) + "\n...[Text truncated for size]" : pdfText;
+  const truncatedText = pdfText.length > 25000 ? pdfText.slice(0, 25000) + "\n...[Text truncated for fast response]" : pdfText;
 
   const prompt = `
-You are an expert, encouraging personal tutor creating a complete study kit for a student studying "${pdfTitle}".
-Based on the following extracted document text, generate a comprehensive study kit containing:
-1. A COMPLETE REVIEWER (Summary, Core Concepts, Key Definitions, Deep-Dive breakdowns, and a Quick Cheat Sheet).
-2. A QUIZ (10 multiple-choice questions with 4 options each, correct answer index 0-3, and clear explanations).
-3. FLASHCARDS (12-15 double-sided flashcards with a clear Question, Detailed Answer, Topic tag, and a helpful Hint).
-
-Document Title: ${pdfTitle}
+You are an expert tutor creating a complete study kit for "${pdfTitle}".
+Based on the text below, generate:
+1. REVIEWER (Summary, 4 Core Concepts, 5 Key Definitions, 3 Deep-Dive topics, 5 Cheat Sheet takeaways).
+2. QUIZ (8 multiple-choice questions with 4 options each, correctIndex 0-3, and clear explanation).
+3. FLASHCARDS (10 double-sided cards with Question, Answer, Topic, and Hint).
 
 Document Content:
 ${truncatedText}
-
-OUTPUT RULES:
-- Output MUST strictly be valid JSON adhering to the specified schema.
-- The reviewer MUST be detailed, clear, organized, and helpful for exam preparation.
-- Make all explanations encouraging, aesthetic, and crystal clear.
 `;
 
   const schema = {
@@ -113,8 +118,7 @@ OUTPUT RULES:
               type: "OBJECT",
               properties: {
                 term: { type: "STRING" },
-                definition: { type: "STRING" },
-                context: { type: "STRING" }
+                definition: { type: "STRING" }
               },
               required: ["term", "definition"]
             }

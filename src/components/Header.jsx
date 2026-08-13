@@ -12,32 +12,33 @@ export default function Header({
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      padding: '1.25rem 2rem',
-      borderRadius: 'var(--radius-lg)',
-      margin: '1.5rem auto',
+      padding: '0.85rem 1.25rem',
+      borderRadius: 'var(--radius-md)',
+      margin: '1rem auto',
       maxWidth: '1200px',
-      width: '92%'
+      width: '94%'
     }} className="glass-panel">
       {/* Brand Logo */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
         <div style={{
-          width: '46px',
-          height: '46px',
-          borderRadius: '16px',
+          width: '40px',
+          height: '40px',
+          borderRadius: '12px',
           background: 'linear-gradient(135deg, #FF9EBB 0%, #FF6584 50%, #F72585 100%)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          boxShadow: '0 6px 18px rgba(247, 37, 133, 0.3)',
-          color: '#FFFFFF'
-        }} className="animate-float">
-          <BookOpen size={24} />
+          boxShadow: '0 4px 14px rgba(247, 37, 133, 0.25)',
+          color: '#FFFFFF',
+          flexShrink: 0
+        }}>
+          <BookOpen size={20} />
         </div>
 
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
             <h1 style={{ 
-              fontSize: '1.6rem', 
+              fontSize: '1.35rem', 
               fontWeight: 800,
               background: 'linear-gradient(135deg, var(--text-main) 30%, var(--primary-pink) 100%)',
               WebkitBackgroundClip: 'text',
@@ -45,32 +46,32 @@ export default function Header({
             }}>
               Liliview
             </h1>
-            <Sparkles size={18} color="var(--primary-pink)" />
+            <Sparkles size={16} color="var(--primary-pink)" />
           </div>
-          <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 500 }}>
-            Pastel PDF Study Companion
+          <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 500 }}>
+            Study Kit Maker
           </p>
         </div>
       </div>
 
       {/* Action Controls */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
         {/* Saved History Button */}
         <button 
           onClick={onOpenHistory} 
           className="btn-secondary"
-          style={{ padding: '0.6rem 1rem', fontSize: '0.88rem' }}
+          style={{ padding: '0.5rem 0.85rem', fontSize: '0.82rem', minHeight: '38px' }}
           title="Past Saved Study Kits"
         >
-          <History size={18} />
+          <History size={16} />
           <span>Saved</span>
           {historyCount > 0 && (
             <span style={{
               background: 'var(--primary-pink)',
               color: '#FFF',
               borderRadius: '99px',
-              padding: '2px 7px',
-              fontSize: '0.75rem',
+              padding: '1px 6px',
+              fontSize: '0.72rem',
               fontWeight: 700
             }}>
               {historyCount}
@@ -82,13 +83,13 @@ export default function Header({
         <button 
           onClick={onToggleTheme} 
           className="btn-secondary"
-          style={{ padding: '0.6rem', borderRadius: 'var(--radius-md)' }}
+          style={{ padding: '0.5rem', minHeight: '38px', width: '38px', borderRadius: 'var(--radius-md)' }}
           title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
         >
           {theme === 'light' ? (
-            <Moon size={20} color="var(--text-main)" />
+            <Moon size={18} color="var(--text-main)" />
           ) : (
-            <Sun size={20} color="var(--primary-pink)" />
+            <Sun size={18} color="var(--primary-pink)" />
           )}
         </button>
       </div>

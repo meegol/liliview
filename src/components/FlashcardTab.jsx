@@ -74,28 +74,28 @@ export default function FlashcardTab({ flashcards }) {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginBottom: '1.5rem',
+        marginBottom: '1.25rem',
         flexWrap: 'wrap',
-        gap: '0.75rem'
+        gap: '0.5rem'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <Layers size={22} color="var(--primary-pink)" />
-          <h2 style={{ fontSize: '1.4rem', fontWeight: 800 }}>3D Interactive Flashcards</h2>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+          <Layers size={20} color="var(--primary-pink)" />
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 800 }}>3D Interactive Flashcards</h2>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <button onClick={handleShuffle} className="btn-secondary" style={{ padding: '0.45rem 0.85rem', fontSize: '0.82rem' }}>
-            <Shuffle size={14} /> Shuffle Cards
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+          <button onClick={handleShuffle} className="btn-secondary" style={{ padding: '0.4rem 0.75rem', fontSize: '0.78rem', minHeight: '34px' }}>
+            <Shuffle size={13} /> Shuffle
           </button>
           
-          <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600 }}>
+          <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>
             Mastered: <span style={{ color: 'var(--accent-rose)', fontWeight: 700 }}>{masteredIds.size}</span> / {cards.length}
           </div>
         </div>
       </div>
 
       {/* 3D Flip Card Container */}
-      <div className="perspective-1000" style={{ height: '360px', width: '100%', marginBottom: '1.75rem', cursor: 'pointer' }} onClick={handleFlip}>
+      <div className="perspective-1000" style={{ minHeight: '320px', height: '340px', width: '100%', marginBottom: '1.5rem', cursor: 'pointer' }} onClick={handleFlip}>
         <div className={`flashcard-inner ${isFlipped ? 'flipped' : ''}`}>
           
           {/* Card Front */}
@@ -108,31 +108,31 @@ export default function FlashcardTab({ flashcards }) {
                 <span style={{
                   backgroundColor: 'var(--soft-pink-bg)',
                   color: 'var(--accent-rose)',
-                  padding: '0.25rem 0.75rem',
+                  padding: '0.2rem 0.65rem',
                   borderRadius: 'var(--radius-full)',
-                  fontSize: '0.78rem',
+                  fontSize: '0.75rem',
                   fontWeight: 700
                 }}>
                   {currentCard.topic || 'Concept'}
                 </span>
-                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>
+                <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontWeight: 600 }}>
                   Card {currentIndex + 1} of {cards.length}
                 </span>
               </div>
             </div>
 
             <div style={{ textAlign: 'center', margin: 'auto 0' }}>
-              <h3 style={{ fontSize: '1.4rem', fontWeight: 700, color: 'var(--text-main)', lineHeight: 1.5 }}>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-main)', lineHeight: 1.5 }}>
                 {currentCard.question}
               </h3>
 
               {showHint && currentCard.hint && (
                 <p style={{
-                  marginTop: '1rem',
-                  fontSize: '0.88rem',
+                  marginTop: '0.75rem',
+                  fontSize: '0.82rem',
                   color: 'var(--accent-rose)',
                   backgroundColor: 'rgba(255, 255, 255, 0.5)',
-                  padding: '0.5rem 1rem',
+                  padding: '0.4rem 0.85rem',
                   borderRadius: 'var(--radius-md)',
                   display: 'inline-block'
                 }}>
@@ -146,14 +146,14 @@ export default function FlashcardTab({ flashcards }) {
                 <button 
                   onClick={(e) => { e.stopPropagation(); setShowHint(!showHint); }}
                   className="btn-secondary"
-                  style={{ padding: '0.35rem 0.75rem', fontSize: '0.78rem' }}
+                  style={{ padding: '0.3rem 0.65rem', fontSize: '0.75rem', minHeight: '32px' }}
                 >
-                  <Eye size={14} /> {showHint ? 'Hide Hint' : 'Show Hint'}
+                  <Eye size={13} /> {showHint ? 'Hide Hint' : 'Show Hint'}
                 </button>
               ) : <div />}
 
-              <span style={{ fontSize: '0.82rem', color: 'var(--primary-pink)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-                <RotateCw size={14} /> Click card to flip
+              <span style={{ fontSize: '0.78rem', color: 'var(--primary-pink)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                <RotateCw size={13} /> Tap to flip
               </span>
             </div>
           </div>
@@ -167,33 +167,33 @@ export default function FlashcardTab({ flashcards }) {
               <span style={{
                 backgroundColor: 'var(--accent-rose)',
                 color: '#FFF',
-                padding: '0.25rem 0.75rem',
+                padding: '0.2rem 0.65rem',
                 borderRadius: 'var(--radius-full)',
-                fontSize: '0.78rem',
+                fontSize: '0.75rem',
                 fontWeight: 700
               }}>
                 Answer
               </span>
             </div>
 
-            <div style={{ textAlign: 'center', margin: 'auto 0' }}>
-              <p style={{ fontSize: '1.2rem', fontWeight: 600, color: 'var(--text-main)', lineHeight: 1.6 }}>
+            <div style={{ textAlign: 'center', margin: 'auto 0', overflowY: 'auto' }}>
+              <p style={{ fontSize: '1.05rem', fontWeight: 600, color: 'var(--text-main)', lineHeight: 1.5 }}>
                 {currentCard.answer}
               </p>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '0.85rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '0.65rem' }}>
               <button 
                 onClick={handleMarkNeedsReview}
                 className="btn-secondary"
-                style={{ padding: '0.5rem 1rem', fontSize: '0.82rem', borderColor: 'var(--warning)', color: 'var(--text-main)' }}
+                style={{ padding: '0.45rem 0.85rem', fontSize: '0.78rem', minHeight: '36px', borderColor: 'var(--warning)', color: 'var(--text-main)' }}
               >
                 Needs Review 🧠
               </button>
               <button 
                 onClick={handleMarkMastered}
                 className="btn-pink"
-                style={{ padding: '0.5rem 1rem', fontSize: '0.82rem' }}
+                style={{ padding: '0.45rem 0.85rem', fontSize: '0.78rem', minHeight: '36px' }}
               >
                 Got It! ❤️
               </button>
@@ -205,16 +205,16 @@ export default function FlashcardTab({ flashcards }) {
 
       {/* Bottom Navigation */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <button onClick={handlePrev} className="btn-secondary" style={{ padding: '0.75rem 1.25rem' }}>
-          <ChevronLeft size={18} /> Previous
+        <button onClick={handlePrev} className="btn-secondary" style={{ padding: '0.6rem 1rem', fontSize: '0.85rem', minHeight: '40px' }}>
+          <ChevronLeft size={16} /> Prev
         </button>
 
-        <span style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-muted)' }}>
+        <span style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-muted)' }}>
           {currentIndex + 1} / {cards.length}
         </span>
 
-        <button onClick={handleNext} className="btn-pink" style={{ padding: '0.75rem 1.25rem' }}>
-          Next <ChevronRight size={18} />
+        <button onClick={handleNext} className="btn-pink" style={{ padding: '0.6rem 1rem', fontSize: '0.85rem', minHeight: '40px' }}>
+          Next <ChevronRight size={16} />
         </button>
       </div>
 
